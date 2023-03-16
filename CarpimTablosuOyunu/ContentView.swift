@@ -22,56 +22,54 @@ struct ContentView: View {
                 .resizable()
                 .ignoresSafeArea()
             VStack {
-                Spacer(minLength: 60)
+                Spacer(minLength: 40)
                 VStack{
                     Text("Çarpım Tablosu")
                         .padding()
                         .font(.largeTitle)
-                        .foregroundColor(.teal)
-                        .background(.yellow)
+                        .foregroundColor(Color("Tas"))
+                        .background(Color("Mavi"))
                         .cornerRadius(200)
+                        .overlay(Capsule()
+                            .stroke(AngularGradient(gradient: Gradient(colors: [Color("Kahve")]), center: .bottomTrailing), lineWidth: 5))
                 }.shadow(radius: 5)
-                
+                Spacer(minLength: 40)
                 HStack {
-                    Text("Beraber çarpım tablosu öğrenelim mi? Önce bir sayı, sonra da bir zorluk seç.")
+                    Text("Beraber çarpım tablosu öğrenelim mi?")
                         .padding(20)
-                        .background(.teal)
+                        .background(Color("Mavi"))
+                        .foregroundColor(Color("Krem"))
                         .cornerRadius(20)
-                        .font(.caption)
-                    
-                    Spacer()
-                    VStack {
-                        Image("dinozor")
-                            .resizable()
-                            .padding(10)
-                            .frame(width: 160, height: 170, alignment: .center)
-                            .shadow(radius: 10)
-                    }
+                        .font(.system(size: 20))
                     
                 }
                 Spacer(minLength: 10)
                 HStack {
                     Stepper("Öğrenmek istediğim sayi : \(secilenSayi)", value: $secilenSayi, in: 2...10)
                         .padding()
-                        .background(.yellow)
+                        .background(Color("Tas"))
                         .cornerRadius(20)
+                        .foregroundColor(Color("Mavi"))
                         .font(.title2)
                 }.shadow(radius: 10)
                 
                 HStack {
                     Toggle("Zorlaşsın mı?", isOn: $zorluk)
+                    .foregroundColor(Color("Mavi"))
                     Button ("BAŞLA", action: soruSor)
                 }.shadow(radius: 10)
                     .padding()
-                    .background(.yellow)
+                    .background(Color("Tas"))
                     .cornerRadius(20)
                     .font(.title2)
+                    .foregroundColor(Color("Mavi"))
                 
                 Spacer()
                 VStack {
                     VStack{
                         Text(soru)
                             .font(.largeTitle)
+                            .foregroundColor(Color("Kahve"))
                     }
                     HStack{
                         ForEach(0..<3) {number in Button {
@@ -80,7 +78,7 @@ struct ContentView: View {
                             Text("\(cevaplarSiralama(number: number))")
                                 .padding()
                                 .shadow(radius: 5)
-                                .background()
+                                .background(Color("Tas"))
                                 .clipShape(Circle())
                             
                         }}
@@ -89,7 +87,8 @@ struct ContentView: View {
                 .frame(width: 200, height: 100, alignment: .center)
                 .padding(20)
                 .shadow(radius: 10)
-                .background(.teal)
+                .background(LinearGradient(gradient: Gradient(colors: [Color("Krem"), Color("Tas")]), startPoint: .bottom, endPoint: .top))
+                
                 .cornerRadius(200)
                 
                 HStack {
@@ -98,7 +97,7 @@ struct ContentView: View {
                         .background(.white)
                         .cornerRadius(200)
                         .frame(width: 200, height: 200, alignment: .center)
-                        .foregroundColor(.mint)
+                        .foregroundColor(Color("Kahve"))
                     Button("Tekrar Başla"){}
                         .padding()
                         .background(.white)
@@ -110,6 +109,7 @@ struct ContentView: View {
             }
         }
         .padding()
+        .ignoresSafeArea()
     }
     func soruSor () {
         if zorluk == true {
