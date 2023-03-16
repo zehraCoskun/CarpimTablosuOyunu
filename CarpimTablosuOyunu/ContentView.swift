@@ -10,6 +10,12 @@ import SwiftUI
 struct ContentView: View {
     @State private var secilenSayi = 2
     @State private var digerSayi = 1
+    @State private var zorluk = false
+    @State private var soru = "??"
+    @State public var cevaplar = [2,4,6]
+    @State private var skor = 0
+    
+    
     var body: some View {
         ZStack {
             Image("arkaplan")
@@ -53,37 +59,31 @@ struct ContentView: View {
                 }.shadow(radius: 10)
                 
                 HStack {
-                    Button("Kolay"){kolaySeviye()}
-                        .padding()
-                        .frame(width: 100, height: 60, alignment: .center)
-                        .background(.yellow)
-                        .cornerRadius(20)
-                    
-                    Button("Zor"){zorSeviye()}
-                        .padding()
-                        .frame(width: 100, height: 60, alignment: .center)
-                        .background(.yellow)
-                        .cornerRadius(20)
+                    Toggle("Zorlaşsın mı?", isOn: $zorluk)
+                    Button ("BAŞLA", action: soruSor)
                 }.shadow(radius: 10)
+                    .padding()
+                    .background(.yellow)
+                    .cornerRadius(20)
+                    .font(.title2)
+                
                 Spacer()
                 VStack {
                     VStack{
-                        Text("\(secilenSayi) x \(digerSayi)")
+                        Text(soru)
                             .font(.largeTitle)
                     }
                     HStack{
-                        Button("\(cevaplar(number: 0))"){}
-                            .padding()
-                            .background(.white)
-                            .clipShape(Circle())
-                        Button("\(cevaplar(number: 1))"){}
-                            .padding()
-                            .background(.white)
-                            .clipShape(Circle())
-                        Button("\(cevaplar(number: 2))"){}
-                            .padding()
-                            .background(.white)
-                            .clipShape(Circle())
+                        ForEach(0..<3) {number in Button {
+                            soruSor()
+                        }label: {
+                            Text("\(cevaplarSiralama(number: number))")
+                                .padding()
+                                .shadow(radius: 5)
+                                .background()
+                                .clipShape(Circle())
+                            
+                        }}
                     }
                 }
                 .frame(width: 200, height: 100, alignment: .center)
@@ -93,7 +93,7 @@ struct ContentView: View {
                 .cornerRadius(200)
                 
                 HStack {
-                    Text("SKOR : 200")
+                    Text("SKOR : \(skor)")
                         .padding()
                         .background(.white)
                         .cornerRadius(200)
@@ -107,12 +107,15 @@ struct ContentView: View {
                         .frame(width: 200, height: 10, alignment: .center)
                         .foregroundColor(.red)
                 }.shadow(radius: 10)
-                
             }
-            
-            
         }
         .padding()
+    }
+    func soruSor () {
+        if zorluk == true {
+            zorSeviye()
+        } else { kolaySeviye()}
+        cevaplarFunc()
     }
     func kolaySeviye () -> Int{
         digerSayi = Int.random(in: 1...5)
@@ -122,13 +125,20 @@ struct ContentView: View {
         digerSayi = Int.random(in: 6...10)
         return digerSayi
     }
-    func cevaplar(number: Int) -> Int{
-        var secenekler = [(secilenSayi*digerSayi), ((secilenSayi-1)*digerSayi), (secilenSayi*(digerSayi+1))]
-        secenekler.shuffle()
-        let cevap = secenekler[number]
-        return cevap
+    func cevaplarFunc() {
+        let secenekler = [(secilenSayi*digerSayi), ((secilenSayi-1)*digerSayi), (secilenSayi*(digerSayi+1))]
+        soru = "\(secilenSayi) x \(digerSayi)"
+        cevaplar = secenekler
     }
+    func cevaplarSiralama(number: Int) -> Int {
+        cevaplar.shuffle()
+        return cevaplar[number]
+    }
+    
 }
+
+
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
